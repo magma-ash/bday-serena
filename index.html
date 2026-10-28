@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>A Special Surprise for You</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      width: 100%;
+      max-width: 360px;
+      padding: 30px 20px;
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+      animation: fadeIn 0.4s ease;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #666;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .tap-target {
+      font-size: 75px;
+      margin: 20px 0;
+      cursor: pointer;
+      display: inline-block;
+      transition: transform 0.15s ease;
+      user-select: none;
+    }
+
+    .tap-target:active {
+      transform: scale(0.85);
+    }
+
+    .btn {
+      width: 100%;
+      background: #ff477e;
+      color: white;
+      border: none;
+      padding: 16px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(255, 71, 126, 0.35);
+      margin-top: 15px;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .hint {
+      font-size: 0.8rem;
+      color: #999;
+      margin-top: 5px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .birthday-img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid #ff477e;
+      margin-top: 15px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <audio id="bgMusic" loop>
+    <source src="https://assets.mixkit.co/music/preview/mixkit-celebration-song-339.mp3" type="audio/mp3">
+  </audio>
+
+  <div id="step1" class="card">
+    <h2>🎁 अरे रुको जरा!</h2>
+    <p>तुम्हारे लिए एक ख़ास सरप्राइज़ आया है। खोलकर देखना है?</p>
+    <div class="tap-target" onclick="startSurprise()">📦</div>
+    <br>
+    <button class="btn" onclick="startSurprise()">हाँ, खोलो! 👉</button>
+  </div>
+
+  <div id="step2" class="card hidden">
+    <h2>🎈 रुको-रुको!</h2>
+    <p>गिफ्ट ऐसे ही नहीं मिलेगा, पहले यह गुब्बारा फोड़ो!</p>
+    <div class="tap-target" onclick="popBalloon()">🎈</div>
+    <div class="hint">(गुब्बारे पर टैप करो)</div>
+  </div>
+
+  <div id="step3" class="card hidden">
+    <h2>🎂 विश माँगो!</h2>
+    <p>मन में एक अच्छी सी विश माँगो और केक पर टैप करो!</p>
+    <div class="tap-target" onclick="cutCake()">🕯️🎂🕯️</div>
+    <div class="hint">(केक पर टैप करो)</div>
+  </div>
+
+  <div id="step4" class="card hidden">
+    <h2 style="color: #ff477e; font-size: 1.8rem;">🎉 HAPPY BIRTHDAY! 🎂</h2>
+    
+    <img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400" alt="Birthday" class="birthday-img">
+    
+    <p style="margin-top: 15px; font-weight: 500;">
+      भगवान करे तुम्हारा यह साल खुशियों, तरक्की और ढेर सारी मस्ती से भरा हो! ❤️✨
+    </p>
+
+    <button class="btn" onclick="fireMoreConfetti()">और जश्न मनाओ! 🎊</button>
+  </div>
+
+  <script>
+    const music = document.getElementById('bgMusic');
+
+    function goToStep(current, next) {
+      document.getElementById('step' + current).classList.add('hidden');
+      document.getElementById('step' + next).classList.remove('hidden');
+    }
+
+    function startSurprise() {
+      music.play().catch(() => {});
+      goToStep(1, 2);
+    }
+
+    function popBalloon() {
+      confetti({ particleCount: 40, spread: 50, origin: { y: 0.6 } });
+      goToStep(2, 3);
+    }
+
+    function cutCake() {
+      goToStep(3, 4);
+      fireMegaConfetti();
+    }
+
+    function fireMegaConfetti() {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+      setTimeout(() => {
+        confetti({ particleCount: 80, angle: 60, spread: 55, origin: { x: 0 } });
+        confetti({ particleCount: 80, angle: 120, spread: 55, origin: { x: 1 } });
+      }, 500);
+    }
+
+    function fireMoreConfetti() {
+      fireMegaConfetti();
+    }
+  </script>
+</body>
+</html>
